@@ -6,6 +6,8 @@ import FreeCAD, FreeCADGui
 from importlib import reload
 import sys
 
+print('###### Loading PathHelperFace #####')
+
 try:
     # try import
     m_current_path = os.path.realpath(__file__)
@@ -16,7 +18,7 @@ try:
     import PathHelperFaceGui
     reload(PathHelperFaceGui)
     import PathHelperFace
-    reload(PathHelperFaceGui)
+    reload(PathHelperFace)
 
 except:
     print('Path Helper Face Macro Failed To Load')

@@ -88,11 +88,12 @@ class HelperFace:
 		#FreeCAD.Console.PrintMessage("Change property: " + str(prop) + "\n")
 		pass
 
-	def execute(self, obj):
-		"""
-       	Called on document recompute
-       	"""
+	def onDocumentRestored(self, obj):
+		'''Do something when a document is restored'''
+		pass
 
+	def execute(self, obj):
+		""" Called on document recompute """
 		edgeManager = HelperEdgeManager() 
 		helperEdges = edgeManager.getEdges(obj.BaseFace)
 
