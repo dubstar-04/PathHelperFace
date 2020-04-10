@@ -1,13 +1,12 @@
 import FreeCAD, FreeCADGui
-import Part
-import Draft
 import os, math
-import PathHelperFace
 
 from PySide import QtGui, QtCore
 from PySide.QtGui import QTreeWidgetItem
 
 import PathScripts.PathUtils as PathUtils
+
+import PathHelperFace
 
 dir = os.path.dirname(__file__)
 ui_name = "PathHelperFaceGui.ui"
