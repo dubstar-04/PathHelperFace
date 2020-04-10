@@ -10,7 +10,7 @@ from PySide.QtGui import QTreeWidgetItem
 import PathScripts.PathUtils as PathUtils
 
 dir = os.path.dirname(__file__)
-ui_name = "PathHelperFace.ui"
+ui_name = "PathHelperFaceGui.ui"
 path_to_ui = dir + "/" +ui_name
 
 class PathHelperPanel:
@@ -164,3 +164,12 @@ class PathHelperPanel:
     
 	def quit(self):
 		FreeCADGui.Control.closeDialog(self)
+
+
+def Show():
+    """Open the preferences dialog."""
+    panel = PathHelperPanel()
+
+    if FreeCADGui.Control.activeDialog():
+	    FreeCAD.Console.PrintMessage("Dialog Panel currently open: Close it?")
+    FreeCADGui.Control.showDialog(panel)
