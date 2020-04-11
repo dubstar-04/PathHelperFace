@@ -49,7 +49,6 @@ class PathHelperPanel:
 		self.edges_TW = self.form.edges_TW
 		self.extendDist_LE = self.form.extendDist_LE
 		self.toolController_CB = self.form.toolController_CB
-		self.apply_PB = self.form.apply_PB
 
 		##setup ui
 		self.edges_TW.headerItem().setText(0, "Extendable Edges")
@@ -57,7 +56,6 @@ class PathHelperPanel:
         #connect
 		self.addFace_PB.clicked.connect(self.handleSelection)
 		self.edges_TW.itemClicked.connect(self.edgeSelected)
-		self.apply_PB.clicked.connect(self.extendFace)
 		#self.toolController_CB.currentIndexChanged.connect(self.updateTool)
 
 		if obj:
@@ -184,10 +182,17 @@ class PathHelperPanel:
 	def accept(self):
 		FreeCAD.Console.PrintMessage("\nAccept Signal")
 		self.quit()
-    
+
+	def clicked(self, button):
+		if button == QtGui.QDialogButtonBox.Apply:
+			FreeCAD.Console.PrintMessage("\nApply Signal")
+			self.extendFace()
+
 	def quit(self):
 		FreeCADGui.Control.closeDialog(self)
-
+		
+	def getStandardButtons(self):
+		return int(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Apply | QtGui.QDialogButtonBox.Cancel)
 
 def Show():
     """Open the preferences dialog."""
