@@ -83,7 +83,7 @@ class PathHelperPanel:
 			for subName in sel.SubElementNames:
 				if 'Face' in subName:
 					self.setFaceName(sel.Object, subName)
-					self.helperFace = self.create((sel.Object, subName)) 
+					self.helperFace = PathHelperFace.create((sel.Object, subName)) 
 					self.buildEdgeList()
 					
 				if 'Edge' in subName:
@@ -163,17 +163,6 @@ class PathHelperPanel:
 		tc = self.getToolController()
 		self.helperFace.ToolController = tc
 		
-	def create(self, baseFace):
-		faceName = self.face_LE.text()
-		helperFaceName = faceName + '_Helper'
-		obj = FreeCAD.ActiveDocument.addObject('Part::FeaturePython', helperFaceName)
-		
-		PathHelperFace.HelperFace(obj, baseFace)
-		PathHelperFace.ViewProviderHelperFace(obj.ViewObject)
-		FreeCAD.ActiveDocument.recompute()
-		self.tempObj = obj.Name
-		return obj
-
 	def reject(self):
 		if self.tempObj:
 			FreeCAD.ActiveDocument.removeObject(self.tempObj) 
