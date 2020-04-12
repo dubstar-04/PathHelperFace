@@ -437,3 +437,29 @@ class HelperEdgeManager:
 		x = vec.x * math.cos(angle) - vec.y * math.sin(angle)
 		y = vec.x * math.sin(angle) + vec.y * math.cos(angle)
 		return FreeCAD.Vector(x, y, vec.z)
+
+def create(baseFace):
+
+	modelGroup = baseFace[0].getParentGroup()
+	doc = modelGroup.Document
+	helperGrpName = 'HelperGeometry'
+	helperGrp = None
+
+	for groupObjs in modelGroup.getSubObjects():
+		if groupObjs.replace('.', '') == helperGrpName:
+			helperGrp = doc.getObject(helperGrpName)
+	
+	if not helperGrp:
+		helperGrp = modelGroup.newObject("App::DocumentObjectGroup", helperGrpName)
+
+	objName = baseFace[0].Name
+	faceName = baseFace[1]
+	modelFaceName = objName + '.' + faceName 	
+
+	helperFaceName = modelFaceName + '_Helper'
+	obj = helperGrp.newObject('Part::FeaturePython', helperFaceName)
+	
+	HelperFace(obj, baseFace)
+	ViewProviderHelperFace(obj.ViewObject)
+	FreeCAD.ActiveDocument.recompute()
+	return obj
