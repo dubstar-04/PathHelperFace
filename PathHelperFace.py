@@ -444,12 +444,7 @@ def create(baseFace):
 	job = PathUtils.findParentJob(model)
 	doc = model.Document
 	helperGrpName = job.Name + '_HelperGeometry'
-
-	print('HelperGrpName:', helperGrpName)
-	
 	helperGrp = doc.getObject(helperGrpName)
-
-	print('helperGrp:', helperGrp)
 	
 	if not helperGrp:
 		helperGrp = doc.addObject("App::DocumentObjectGroup", helperGrpName)
