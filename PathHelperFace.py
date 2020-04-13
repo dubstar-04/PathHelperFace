@@ -440,19 +440,21 @@ class HelperEdgeManager:
 
 def create(baseFace):
 
-	modelGroup = baseFace[0].getParentGroup()
-	doc = modelGroup.Document
-	helperGrpName = 'HelperGeometry'
-	helperGrp = None
+	model = baseFace[0]
+	job = PathUtils.findParentJob(model)
+	doc = model.Document
+	helperGrpName = job.Name + '_HelperGeometry'
 
-	for groupObjs in modelGroup.getSubObjects():
-		if groupObjs.replace('.', '') == helperGrpName:
-			helperGrp = doc.getObject(helperGrpName)
+	print('HelperGrpName:', helperGrpName)
+	
+	helperGrp = doc.getObject(helperGrpName)
+
+	print('helperGrp:', helperGrp)
 	
 	if not helperGrp:
-		helperGrp = modelGroup.newObject("App::DocumentObjectGroup", helperGrpName)
+		helperGrp = doc.addObject("App::DocumentObjectGroup", helperGrpName)
 
-	objName = baseFace[0].Name
+	objName = model.Name
 	faceName = baseFace[1]
 	modelFaceName = objName + '.' + faceName 	
 
