@@ -265,23 +265,31 @@ class HelperEdgeManager:
 				for v in edge.Vertexes:	
 					if self.isSamePoint(ep.Point, v.Point):	
 						for bbedge in bbEdges:
-
-							tangent = edge.tangentAt(edge.FirstParameter)
-							if self.isSamePoint(ep.Point, edge.lastVertex().Point):
-								tangent = edge.tangentAt(edge.LastParameter)
-
-							normal = edge.lastVertex().Point.sub(edge.firstVertex().Point)
-							if self.isSamePoint(ep.Point, edge.firstVertex().Point):
-								normal = edge.firstVertex().Point.sub(edge.lastVertex().Point)
-
-							normal = normal.normalize()
-
+							## get the intersection point with the stock edge
 							if Part.Circle == type(edge.Curve):
-								normal = self.rotate(tangent, 1.5708)
+								## get the direction of the end points
+								tangent = edge.tangentAt(edge.FirstParameter).negative()
+								if self.isSamePoint(ep.Point, edge.lastVertex().Point):
+									tangent = edge.tangentAt(edge.LastParameter)
+								normal = tangent
+								# ## If the normal generates a point inside the model rotate the normal by 90 deg 
+								testPoint = ep.Point + 0.01 * tangent
+
+								## if the test point is inside the model take the normal from the circle centre to the end point.
+								if model.Shape.isInside(testPoint, 0.005, True):
+									normal = ep.Point.sub(edge.Curve.Location).normalize()
+
 								endPoint = ep.Point + 5 * normal
 								tempEdge = Part.Edge(Part.LineSegment(ep.Point, FreeCAD.Vector(endPoint.x, endPoint.y, endPoint.z)))
 								intersectPts = tempEdge.Curve.intersectCC(bbedge.Curve)
 							else:
+								## edge is a line
+								## get the normal if the element is a line
+								normal = edge.lastVertex().Point.sub(edge.firstVertex().Point)
+								if self.isSamePoint(ep.Point, edge.firstVertex().Point):
+									normal = edge.firstVertex().Point.sub(edge.lastVertex().Point)
+
+								normal = normal.normalize()
 								intersectPts = edge.Curve.intersectCC(bbedge.Curve)
 
 							if len(intersectPts):
