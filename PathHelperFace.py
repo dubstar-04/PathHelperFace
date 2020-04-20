@@ -124,6 +124,10 @@ class HelperFace:
 		edgeManager = HelperEdgeManager() 
 		helperEdges = edgeManager.getEdges(obj.BaseFace)
 
+		if len(helperEdges) < 3:
+			FreeCAD.Console.PrintError('Helper Face Generation Failed\n')
+			return
+
 		edges = []
 		extendableEdges = []
 		for idx, helperEdge in enumerate(helperEdges):
@@ -177,10 +181,9 @@ class HelperEdgeManager:
 
 	def showEdge(self, edges):
 		Wire = Part.Wire(edges)
-		edgeName = 'testEdge' + str(len(self.tempGeometry))
+		edgeName = 'testEdge'
 		Part.show(Wire, edgeName) 
 		FreeCAD.ActiveDocument.recompute()
-		self.tempGeometry.append(edgeName)
 
 	def getEndPoints(self):
 		points = []
@@ -194,10 +197,9 @@ class HelperEdgeManager:
 		for p in points:
 			if points.count(p) == 1:
 				endPoints.append(Part.Vertex(p))
-		if len(endPoints) == 2:
-			return endPoints
-		else:
-			return None
+
+		return endPoints
+
 
 	def getEdges(self, baseFace):
 		model = baseFace[0]
@@ -211,7 +213,7 @@ class HelperEdgeManager:
 		for edge in wire.Edges:
 			newEdge = HelperEdge(edge, model)
 			if not newEdge._isExtendable():
-				self.helperEdges.append(newEdge)	
+				self.helperEdges.append(newEdge)
 
 		###### get boundingbox edges at face z height ######
 		bbEdges=[]
@@ -235,12 +237,20 @@ class HelperEdgeManager:
 				if len(self.helperEdges):
 					return self.helperEdges
 			
-			return face.Edges
-
 		endPoints = self.getEndPoints()
+
 		if not endPoints:
-			FreeCAD.Console.PrintError('Pocket Selected? currently not supported')
-			return False
+			## No end points generated, face generation failed, return the list of helper edges and exit cleanly. 
+			return self.helperEdges
+		else:
+			## if a single fixed edge cannot be generated return all the edges from the selected face
+			if len(endPoints) > 2:
+				self.helperEdges = []
+				for edge in wire.Edges:
+					newEdge = HelperEdge(edge, model)
+					self.helperEdges.append(newEdge)
+
+				return self.helperEdges	
 
 		## get edge edges ##
 		stockIntersectPoints = []
