@@ -1,7 +1,7 @@
 # PathHelperFace
 A FreeCAD Path Addon to manipulate faces to define machining boundaries.  
 
-# Description
+## Description
 This addon when installed will appear in the Path Workbench toolbar menu, the purpose of this addon is to help select and define machine boundaries by extending faces and defeaturing where required.
 
 ## Features
