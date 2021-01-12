@@ -25,6 +25,7 @@
 import FreeCAD, FreeCADGui
 import Part
 import os, math
+from PySide.QtGui import QMessageBox
 
 import PathScripts.PathUtils as PathUtils
 
@@ -461,6 +462,14 @@ def create(baseFace):
 	model = baseFace[0]
 	job = PathUtils.findParentJob(model)
 	doc = model.Document
+	
+	if job is None:
+		#msgBox = QMessageBox()
+		#msgBox.setText("Select Face from Job Model")
+		#msgBox.exec_()
+		QMessageBox.warning(None, "Invalid Model", "Select Face from a model within the job object")
+		return None
+
 	helperGrpName = job.Name + '_HelperGeometry'
 	helperGrp = doc.getObject(helperGrpName)
 	

@@ -83,8 +83,9 @@ class PathHelperPanel:
 			for subName in sel.SubElementNames:
 				if 'Face' in subName:
 					self.setFaceName(sel.Object, subName)
-					self.helperFace = PathHelperFace.create((sel.Object, subName)) 
-					self.buildEdgeList()
+					self.helperFace = PathHelperFace.create((sel.Object, subName))
+					if self.helperFace is not None: 
+						self.buildEdgeList()
 					
 				if 'Edge' in subName:
 					FreeCAD.Console.PrintError('Edge Selection Not Currently Supported')
@@ -178,7 +179,7 @@ class PathHelperPanel:
 			self.extendFace()
 
 	def quit(self):
-		FreeCADGui.Control.closeDialog(self)
+		FreeCADGui.Control.closeDialog()
 		
 	def getStandardButtons(self):
 		return int(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Apply | QtGui.QDialogButtonBox.Cancel)
