@@ -137,15 +137,15 @@ class PathHelperPanel:
 				edgeNumber = int(treeFace.child(i).text(0).replace('Edge', ''))
 				checkedEdges.append(edgeNumber)
 				
-		self.helperFace.ExtraDist = float(self.extendDist_LE.text())
+		self.helperFace.ExtraDist = FreeCAD.Units.Quantity(self.extendDist_LE.text()).Value
 		self.helperFace.CheckedEdges = checkedEdges
 		FreeCAD.ActiveDocument.recompute()
 		
 	def loadTools(self):
 		job = PathUtils.findParentJob(self.helperFace.BaseFace[0])
 		self.toolController_CB.addItem('None')
-		for idx, tc in enumerate(job.ToolController):					
-			self.toolController_CB.addItem(tc.Name)
+		for idx, tc in enumerate(job.Tools.Group):					
+			self.toolController_CB.addItem(tc.Label)
 			
 			if self.helperFace.ToolController:
 				if tc.Name == self.helperFace.ToolController.Name:
@@ -154,8 +154,8 @@ class PathHelperPanel:
 	def getToolController(self):
 		job = PathUtils.findParentJob(self.helperFace.BaseFace[0])
 		tcStr = self.toolController_CB.currentText()
-		for tc in job.ToolController:
-			if tc.Name == tcStr:
+		for tc in job.Tools.Group:
+			if tc.Label == tcStr:
 				return tc
 		
 		return None
