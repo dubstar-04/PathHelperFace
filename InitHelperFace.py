@@ -54,12 +54,12 @@ def updateMenu(workbench):
         print('Path Helperface Addon loaded:', workbench)
 
         mw = FreeCADGui.getMainWindow()
-        pathAddonAction = getAction(mw, "PathSimulatorNextToolbarAction")
+        pathAddonAction = getAction(mw, "PathHelperfaceToolbarAction")
         # Uncomment to show icon on path toolbar
-        # PathAddonCommon.loadToolBar("Path Simulator Next", [pathAddonAction])
+        # PathAddonCommon.loadToolBar("Path Helperface", [pathAddonAction])
 
         pathAddonMenu = PathAddonCommon.loadPathAddonMenu()
-        PathSimulatorNextAction = mw.findChild(QtGui.QAction, "PathSimulatorNextMenuAction")
+        PathSimulatorNextAction = mw.findChild(QtGui.QAction, "PathHelperfaceMenuAction")
 
         if not PathSimulatorNextAction:
             # create addon action
